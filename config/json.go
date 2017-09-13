@@ -34,6 +34,22 @@ func LoadJsonConfigFromBytes(b []byte) (*JsonConfig, error) {
 	return s, nil
 }
 
+func WriteToJsConfigFile(dst string, v interface{}) error {
+
+	var out bytes.Buffer
+
+	datas, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	json.Indent(&out, datas, "", "   ")
+	if err = ioutil.WriteFile(dst, out.Bytes(), 0666); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *JsonConfig) Dump() (string, error) {
 	var rj bytes.Buffer
 	if err := json.Indent(&rj, s.rb, "", "\t"); err != nil {
